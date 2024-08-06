@@ -1,0 +1,23 @@
+// KQL hunt for:
+// Powershell Download file
+// Finds PowerShell execution events that could involve a download.
+DeviceProcessEvents  
+//| where Timestamp > ago(7d)
+//filters:
+| where ProcessCommandLine !has "https://chocolatey.org/install.ps1"
+| where InitiatingProcessParentFileName !has "clion64.exe"
+| where InitiatingProcessFileName !has "elevator.exe" and InitiatingProcessVersionInfoOriginalFileName !has "elevator.exe"
+| where ProcessCommandLine !has "Microsoft Visual Studio" and ProcessCommandLine !has "vcpkg-init.cmd"
+//query:
+| where FileName in ("powershell.exe", "POWERSHELL.EXE", "powershell_ise.exe", "POWERSHELL_ISE.EXE") 
+| where ProcessCommandLine has "Net.WebClient"
+or ProcessCommandLine has "DownloadFile"
+or ProcessCommandLine has "Invoke-WebRequest"
+or ProcessCommandLine has "Invoke-Shellcode"
+or ProcessCommandLine has "http"
+or ProcessCommandLine has "IEX"
+or ProcessCommandLine has "Start-BitsTransfer"
+or ProcessCommandLine has "mpcmdrun.exe"
+or ProcessCommandLine has "http:"
+or ProcessCommandLine has "https:"
+| project Timestamp, DeviceId, ReportId, DeviceName, InitiatingProcessFileName, FileName, ProcessCommandLine, InitiatingProcessAccountUpn

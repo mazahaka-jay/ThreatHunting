@@ -1,0 +1,9 @@
+// KQL hunt for:
+// Diamond Sleet supply chain attack - modified CyberLink installer
+let iocs = dynamic(["166d1a6ddcde4e859a89c2c825cd3c8c953a86bfa92b343de7e5bfbfb5afb8be",
+"089573b3a1167f387dcdad5e014a5132e998b2c89bff29bcf8b06dd497d4e63d",
+"915c2495e03ff7408f11a2a197f23344004c533ff87db4b807cc937f80c217a1"]);
+DeviceFileEvents
+| where ActionType == "FileCreated"
+| where SHA256 in (iocs)
+| project Timestamp, ReportId, DeviceId, DeviceName, FileName, FolderPath, SHA256

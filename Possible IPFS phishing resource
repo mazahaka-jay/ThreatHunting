@@ -1,0 +1,18 @@
+// KQL hunt for:
+// Possible IPFS phishing resource
+let url = "ipfs.";
+search in (DeviceNetworkEvents,DeviceFileEvents,DeviceEvents,BehaviorEntities)
+(RemoteUrl contains url
+or FileOriginUrl contains url
+or FileOriginReferrerUrl contains url
+)
+// FP:
+and RemoteUrl != "ipfs.io" 
+and RemoteUrl != "https://ipfs.io" 
+and RemoteUrl != "https://ipfs.best-practice.se" 
+and RemoteUrl != "https://gateway.ipfs.io" 
+and RemoteUrl !="https://cloudflare-ipfs.com" 
+and RemoteUrl != "ipfs.io" 
+and RemoteUrl != "ipfs.best-practice.se" 
+and RemoteUrl != "gateway.ipfs.io" 
+and RemoteUrl !="cloudflare-ipfs.com"

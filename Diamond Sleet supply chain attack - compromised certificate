@@ -1,0 +1,8 @@
+// KQL hunt for:
+// Diamond Sleet supply chain attack - compromised certificate
+DeviceFileCertificateInfo
+| where Signer contains "CyberLink Corp"
+| where CertificateSerialNumber == "0a08d3601636378f0a7d64fd09e4a13b"
+| where SignerHash == "8aa3877ab68ba56dabc2f2802e813dc36678aef4"
+| join DeviceFileEvents on SHA1
+| distinct Timestamp, DeviceId, ReportId, DeviceName, FileName, FolderPath, SHA1, SHA256, IsTrusted, IsRootSignerMicrosoft, SignerHash

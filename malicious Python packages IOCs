@@ -1,0 +1,12 @@
+// KQL hunt for:
+// A pernicious potpourri of Python packages in PyPI 
+// https://www.welivesecurity.com/en/eset-research/pernicious-potpourri-python-packages-pypi/
+// https://github.com/advisories?query=type%3Amalware
+// https://xakep.ru/2024/01/30/whitesnake-campaigns/
+let IP = "51.178.25.148";
+union withsource=SourceTable DeviceEvents,DeviceProcessEvents,DeviceNetworkEvents,DeviceFileEvents,DeviceRegistryEvents,DeviceLogonEvents,DeviceImageLoadEvents
+| where RemoteUrl contains IP
+or FileOriginUrl contains IP
+or FileOriginReferrerUrl contains IP
+or RemoteIP contains IP
+or (FileName contains "pyefflorer" or FileName contains "pyhulul" or FileName contains "pyjio" or FileName contains "pyioler" or FileName contains "pytasler" or FileName contains "kokokoako" or FileName contains "pyalsogkert" or FileName contains "pyioapso" or FileName contains "pykokalalz" or FileName contains "pyhjdddo" or FileName contains "pyktrkatoo" or FileName contains "pytarlooko" or FileName contains "pystallerer" or FileName contains "pykooler" or FileName contains "pyowler" or FileName contains "pylioner" or FileName contains "pystob" or FileName contains "pyminor" or FileName contains "pyjoul" or FileName contains "pyghoster" or FileName contains "pypiele" or FileName contains "gogogolokl" or FileName contains "lalalaopti" or FileName contains "pyclack" or FileName contains "pywolle" or FileName contains "pywhool" or FileName contains "pywool")

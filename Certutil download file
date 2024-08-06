@@ -1,0 +1,9 @@
+// KQL hunt for:
+// Certutil download file
+// Certutil Remote Download
+union withsource=SourceTable AlertEvidence, DeviceProcessEvents, DeviceEvents
+| where (FileName == "certutil.exe" and ProcessCommandLine has "urlcache")
+    or (InitiatingProcessFileName == "certutil.exe" and InitiatingProcessCommandLine has "urlcache")
+    or (AdditionalFields has_all ("certutil", "urlcache"))
+    or (ProcessCommandLine has_all ("certutil", "urlcache"))
+    or (InitiatingProcessCommandLine has_all ("certutil", "urlcache"))

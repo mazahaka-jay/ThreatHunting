@@ -1,0 +1,11 @@
+// KQL hunt for:
+// Attempt to disable MS Defender by Powershell
+// v1
+// Detect PowerShell commands modifying Windows Defender preferences
+union withsource=SourceTable DeviceProcessEvents, DeviceEvents
+//| where FileName == "powershell.exe"
+// FP:
+| where (InitiatingProcessFileName != "JetBrains.Rider.AfterInstall.exe" and InitiatingProcessVersionInfoOriginalFileName != "JetBrains.Rider.AfterInstall.exe") and  (InitiatingProcessParentFileName != "JetBrains.Rider.AfterInstall.exe") and (InitiatingProcessParentFileName != "elevator.exe")
+| where ProcessCommandLine has_any ("Add-MpPreference", "Set-MpPreference") or  InitiatingProcessCommandLine has_any ("Add-MpPreference", "Set-MpPreference") or AdditionalFields has_any ("Add-MpPreference", "Set-MpPreference")
+//| where ProcessCommandLine has_any ("DisableAntiSpyware", "DisableRealtimeMonitoring", "DisableArchiveScanning", "DisableRemovableDriveScanning", "ExclusionPath", "ExclusionProcess", "ExclusionExtension", "PUAProtection 0", "MAPSReporting 0", "UILockdown") or InitiatingProcessCommandLine has_any ("DisableAntiSpyware", "DisableRealtimeMonitoring", "DisableArchiveScanning", "DisableRemovableDriveScanning", "ExclusionPath", "ExclusionProcess", "ExclusionExtension", "PUAProtection 0", "MAPSReporting 0", "UILockdown")
+| project ReportId, SourceTable, DeviceId, DeviceName, Timestamp, FileName,FolderPath,ProcessCommandLine,AccountName,  InitiatingProcessAccountDomain, InitiatingProcessFileName, InitiatingProcessFolderPath, InitiatingProcessCommandLine, InitiatingProcessAccountName, AdditionalFields
